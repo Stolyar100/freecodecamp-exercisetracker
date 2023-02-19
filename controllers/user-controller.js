@@ -1,6 +1,9 @@
+import UserService from "../services/user-service.js"
+
 class UserController {
   async addUser(req, res) {
     const { username } = req.body
+    const createdUser = await UserService.createUser(username)
     
   }
 
