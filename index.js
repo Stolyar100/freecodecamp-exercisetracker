@@ -14,7 +14,7 @@ mongoose
 const app = express()
 
 app.use(cors())
-app.use(express.json())
+app.use(express.urlencoded())
 app.use(express.static('public'))
 app.get('/', (req, res) => {
   res.sendFile(process.cwd() + '/views/index.html')
