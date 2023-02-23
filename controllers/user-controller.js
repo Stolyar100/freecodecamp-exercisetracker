@@ -1,3 +1,4 @@
+import moment from 'moment'
 import UserService from '../services/user-service.js'
 import UserDto from '../dtos/user-dto.js'
 import ExerciseDto from '../dtos/exercise-dto.js'
@@ -27,7 +28,9 @@ class UserController {
       UserService.createExercise({
         userId,
         description,
-        date: date ? new Date(date).valueOf() : Date.now(),
+        date: moment(new Date(date || Date.now())).format(
+          'YYYY-MM-DD[T00:00:00.000Z]'
+        ),
         duration,
       }),
       UserService.getUserById(userId),
