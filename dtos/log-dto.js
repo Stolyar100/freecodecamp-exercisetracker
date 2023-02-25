@@ -6,7 +6,12 @@ class LogDto {
     this.username = username
     this._id = _id
     this.count = exercisesCount
-    this.log = exercises
+    this.log = exercises.map((exercise) => ({
+      description: exercise.description,
+      duration: exercise.duration,
+      date: exercise.date.toDateString(),
+      _id: exercise._id,
+    }))
   }
 }
 

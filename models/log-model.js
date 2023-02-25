@@ -1,10 +1,10 @@
 import mongoose, { Schema } from 'mongoose'
 
 const logSchema = new Schema({
-  user: mongoose.Types.ObjectId,
+  user: { type: mongoose.Types.ObjectId, required: true },
   description: String,
   duration: Number,
-  date: Date,
+  date: { type: Date, default: Date.now(), required: true },
 })
 
 const LogModel = mongoose.model('Log', logSchema)

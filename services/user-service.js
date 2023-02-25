@@ -17,10 +17,9 @@ class UserService {
     return userById
   }
 
-  async createExercise({ userId, description, duration, date }) {
-    console.log(typeof date, date)
-    const createdExercise = new LogModel({
-      user: userId,
+  async createExercise({ user, description, duration, date }) {
+    const createdExercise = await LogModel.create({
+      user,
       description,
       duration,
       date,
@@ -29,14 +28,20 @@ class UserService {
   }
 
   async getLog({ userId, from, to, limit }) {
-    const logResults = await LogModel.find(
-      {
-        user: userId,
-        date: { ...(from && { $gte: from }), ...(to && { $lte: to }) },
-      },
-      null,
-      { ...(limit && { limit }) }
-    )
+    const query = {
+      user: userId,
+    }
+
+    if (from || to) {
+      query.date = {
+        ...(from && { $gte: new Date(from).toISOString() }),
+        ...(to && { $lte: new Date(to).toISOString() }),
+      }
+    }
+
+    const logResults = await LogModel.find(query, null, {
+      ...(limit && { limit }),
+    })
     return logResults
   }
 }

@@ -1,7 +1,8 @@
 class ExerciseDto {
-  constructor(username, exercise) {
-    const { description, duration, date, _id } = exercise
-    const dateString = date.toDateString()
+  constructor(user, exercise) {
+    const { description, duration, date } = exercise
+    const { username, _id } = user
+    const dateString = new Date(date).toDateString()
 
     this.username = username
     this.description = description

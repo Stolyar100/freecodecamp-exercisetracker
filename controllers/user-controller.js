@@ -1,4 +1,3 @@
-import moment from 'moment'
 import UserService from '../services/user-service.js'
 import UserDto from '../dtos/user-dto.js'
 import ExerciseDto from '../dtos/exercise-dto.js'
@@ -23,20 +22,19 @@ class UserController {
   async addExercise(req, res) {
     const { _id: userId } = req.params
     const { description, duration, date } = req.body
+    const exerciseToCreate = {
+      user: userId,
+      description,
+      duration,
+      date,
+    }
 
-    const [createdExercise, { username }] = await Promise.all([
-      UserService.createExercise({
-        userId,
-        description,
-        date: moment(new Date(date || Date.now())).format(
-          'YYYY-MM-DD[T00:00:00.000Z]'
-        ),
-        duration,
-      }),
+    const [createdExercise, user] = await Promise.all([
+      UserService.createExercise(exerciseToCreate),
       UserService.getUserById(userId),
     ])
 
-    const exerciseDto = new ExerciseDto(username, createdExercise)
+    const exerciseDto = new ExerciseDto(user, createdExercise)
     return res.status(201).json(exerciseDto)
   }
 
@@ -47,8 +45,8 @@ class UserController {
     const user = await UserService.getUserById(userId)
     const logResults = await UserService.getLog({ userId, from, to, limit })
 
-    const LogDto = new LogDto(user, logResults)
-    return res.status(200).json(LogDto)
+    const logDto = new LogDto(user, logResults)
+    return res.status(200).json(logDto)
   }
 }
 
